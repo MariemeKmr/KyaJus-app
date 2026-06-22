@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Logo from "@/components/Logo";
 
 export default function ConnexionPage() {
   const router = useRouter();
@@ -25,11 +26,11 @@ export default function ConnexionPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-lg shadow-jus-100/60">
+    <main className="min-h-screen flex items-center justify-center bg-fond-doux px-4">
+      <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-lg shadow-primaire/10">
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-jus-600">KyaJus</h1>
-          <p className="mt-1 text-sm text-stone-500">Espace de gestion</p>
+          <Logo taille="text-4xl" />
+          <p className="mt-2 text-sm text-stone-500">Espace de gestion</p>
         </div>
 
         {erreur && (
@@ -38,30 +39,30 @@ export default function ConnexionPage() {
 
         <div className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium text-stone-700">Email</label>
+            <label className="mb-1 block text-sm font-medium text-titre">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-stone-200 px-3 py-2.5 text-sm outline-none focus:border-jus-400 focus:ring-2 focus:ring-jus-100"
+              className="w-full rounded-lg border border-stone-200 px-3 py-2.5 text-sm outline-none focus:border-primaire focus:ring-2 focus:ring-primaire/20"
               placeholder="superadmin@kyajus.sn"
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-stone-700">Mot de passe</label>
+            <label className="mb-1 block text-sm font-medium text-titre">Mot de passe</label>
             <input
               type="password"
               value={motDePasse}
               onChange={(e) => setMotDePasse(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && soumettre()}
-              className="w-full rounded-lg border border-stone-200 px-3 py-2.5 text-sm outline-none focus:border-jus-400 focus:ring-2 focus:ring-jus-100"
-              placeholder="••••••••"
+              className="w-full rounded-lg border border-stone-200 px-3 py-2.5 text-sm outline-none focus:border-primaire focus:ring-2 focus:ring-primaire/20"
+              placeholder="********"
             />
           </div>
           <button
             onClick={soumettre}
             disabled={chargement}
-            className="w-full rounded-lg bg-jus-500 py-2.5 text-sm font-semibold text-white transition hover:bg-jus-600 disabled:opacity-60"
+            className="w-full rounded-lg bg-primaire py-2.5 text-sm font-semibold text-white transition hover:bg-primaire-hover disabled:opacity-60"
           >
             {chargement ? "Connexion..." : "Se connecter"}
           </button>
