@@ -3,6 +3,21 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
+const jus = [
+  "Bouye lait",
+  "Bouye goyave",
+  "Bouye bissap",
+  "Bissap",
+  "Bissap blanc",
+  "Ginger",
+  "Ditakh",
+  "Citron",
+  "Tamarin",
+  "Maad",
+  "Pasteque",
+  "Orange",
+];
+
 async function main() {
   const motDePasse = await bcrypt.hash("superadmin123", 10);
 
@@ -23,7 +38,18 @@ async function main() {
     create: { id: 1, tauxReinvestissement: 0 },
   });
 
-  console.log("Seed termine : superadmin@kyajus.sn / superadmin123");
+  // Creation des 12 jus si absents. Les prix sont a 0 et doivent etre
+  // ajustes ensuite depuis l'espace Produits.
+  for (const nom of jus) {
+    const existe = await prisma.produit.findFirst({ where: { nom } });
+    if (!existe) {
+      await prisma.produit.create({
+        data: { nom, prixVente: 0, prixRevient: 0, stock: 0, actif: true },
+      });
+    }
+  }
+
+  console.log("Seed termine : super admin, parametre finance et 12 jus (prix a definir).");
 }
 
 main()
