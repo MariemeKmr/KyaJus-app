@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
+import { formatFCFA } from "@/lib/format";
 
-export function formatFCFA(montant: number) {
-  return Math.round(montant).toLocaleString("fr-FR") + " FCFA";
-}
+// Re-export pour conserver les imports existants depuis "@/lib/finance".
+export { formatFCFA };
 
 export async function getResumeFinance() {
   const commandesPayees = await prisma.commande.findMany({
