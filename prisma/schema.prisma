@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  VENDEUR
+  VISITEUR
+}
+
+enum StatutCommande {
+  EN_ATTENTE
+  VALIDEE
+  EN_PREPARATION
+  LIVREE
+  ANNULEE
+}
+
+model User {
+  id           String        @id @default(cuid())
+  nom          String
+  email        String        @unique
+  motDePasse   String
+  role         Role          @default(VISITEUR)
+  actif        Boolean       @default(true)
+  investisseur Investisseur?
+  commandes    Commande[]    @relation("ClientCommandes")
+  ventes       Commande[]    @relation("VendeurCommandes")
+  depenses     Depense[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Investisseur {
+  id             String   @id @default(cuid())
+  userId         String?  @unique
+  user           User?    @relation(fields: [userId], references: [id])
+  nom            String
+  montantInvesti Decimal  @default(0) @db.Decimal(12, 2)
+  partPourcent   Decimal  @default(0) @db.Decimal(5, 2)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Produit {
+  id          String          @id @default(cuid())
+  nom         String
+  description String?
+  prixVente   Decimal         @db.Decimal(12, 2)
+  prixRevient Decimal         @db.Decimal(12, 2)
+  stock       Int             @default(0)
+  imageUrl    String?
+  actif       Boolean         @default(true)
+  lignes      LigneCommande[]
+  packItems   PackItem[]
+  lots        LotProduction[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model LotProduction {
+  id                  String     @id @default(cuid())
+  produitId           String
+  produit             Produit    @relation(fields: [produitId], references: [id], onDelete: Cascade)
+  reference           String?
+  bouteillesProduites Int
+  date                DateTime   @default(now())
+  lignes              LigneLot[]
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+}
+
+model LigneLot {
+  id      String        @id @default(cuid())
+  lotId   String
+  lot     LotProduction @relation(fields: [lotId], references: [id], onDelete: Cascade)
+  libelle String
+  montant Decimal       @db.Decimal(12, 2)
+}
+
+model Pack {
+  id          String          @id @default(cuid())
+  nom         String
+  description String?
+  prixVente   Decimal         @db.Decimal(12, 2)
+  imageUrl    String?
+  actif       Boolean         @default(true)
+  items       PackItem[]
+  lignes      LigneCommande[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model PackItem {
+  id        String  @id @default(cuid())
+  packId    String
+  pack      Pack    @relation(fields: [packId], references: [id], onDelete: Cascade)
+  produitId String
+  produit   Produit @relation(fields: [produitId], references: [id])
+  quantite  Int
+
+  @@unique([packId, produitId])
+}
+
+model Commande {
+  id        String          @id @default(cuid())
+  numero    String          @unique
+  clientId  String?
+  client    User?           @relation("ClientCommandes", fields: [clientId], references: [id])
+  vendeurId String?
+  vendeur   User?           @relation("VendeurCommandes", fields: [vendeurId], references: [id])
+  statut    StatutCommande  @default(EN_ATTENTE)
+  paye      Boolean         @default(false)
+  total     Decimal         @db.Decimal(12, 2)
+  lignes    LigneCommande[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+model LigneCommande {
+  id           String   @id @default(cuid())
+  commandeId   String
+  commande     Commande @relation(fields: [commandeId], references: [id], onDelete: Cascade)
+  produitId    String?
+  produit      Produit? @relation(fields: [produitId], references: [id])
+  packId       String?
+  pack         Pack?    @relation(fields: [packId], references: [id])
+  quantite     Int
+  prixUnitaire Decimal  @db.Decimal(12, 2)
+  coutUnitaire Decimal  @db.Decimal(12, 2)
+}
+
+model Depense {
+  id          String   @id @default(cuid())
+  categorie   String
+  montant     Decimal  @db.Decimal(12, 2)
+  description String?
+  date        DateTime @default(now())
+  createdById String?
+  createdBy   User?    @relation(fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model ParametreFinance {
+  id                   Int      @id @default(1)
+  tauxReinvestissement Decimal  @default(0) @db.Decimal(5, 2)
+  updatedAt            DateTime @updatedAt
+}
