@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { signOut } from "@/auth";
 import AdminNav from "@/components/admin/AdminNav";
 import { LogOut } from "lucide-react";
+import Logo from "@/components/Logo";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -18,7 +19,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
       {/* En-tete mobile */}
       <header className="flex items-center justify-between border-b border-stone-200 bg-white px-4 py-3 md:hidden">
-        <span className="text-lg font-bold text-jus-600">KyaJus</span>
+        <Logo taille="text-2xl" />
         <form
           action={async () => {
             "use server";

@@ -7,10 +7,10 @@ export default async function DashboardPage() {
   const f = await getResumeFinance();
 
   const cartes = [
-    { label: "Revenus", valeur: formatFCFA(f.revenus), icon: Wallet, couleur: "text-feuille-600", fond: "bg-feuille-500/10" },
+    { label: "Revenus", valeur: formatFCFA(f.revenus), icon: Wallet, couleur: "text-secondaire", fond: "bg-secondaire/10" },
     { label: "Coût marchandises", valeur: formatFCFA(f.coutMarchandises), icon: ShoppingCart, couleur: "text-amber-600", fond: "bg-amber-500/10" },
     { label: "Dépenses", valeur: formatFCFA(f.depenses), icon: TrendingDown, couleur: "text-red-600", fond: "bg-red-500/10" },
-    { label: "Bénéfice net", valeur: formatFCFA(f.beneficeNet), icon: TrendingUp, couleur: "text-jus-600", fond: "bg-jus-500/10" },
+    { label: "Bénéfice net", valeur: formatFCFA(f.beneficeNet), icon: TrendingUp, couleur: "text-primaire", fond: "bg-primaire/10" },
     { label: "À réinvestir", valeur: formatFCFA(f.montantReinvesti), icon: PiggyBank, couleur: "text-indigo-600", fond: "bg-indigo-500/10" },
     { label: "Taux de réinvestissement", valeur: `${f.taux} %`, icon: Percent, couleur: "text-stone-600", fond: "bg-stone-500/10" },
   ];
@@ -18,8 +18,7 @@ export default async function DashboardPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-stone-800">
-          Bonjour {session?.user?.name?.split(" ")[0]}
+        <h1 className="text-2xl font-bold text-titre">          Bonjour {session?.user?.name?.split(" ")[0]}
         </h1>
         <p className="mt-1 text-sm text-stone-500">Voici un apercu de votre activite.</p>
       </div>

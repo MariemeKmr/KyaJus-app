@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
+import Logo from "@/components/Logo";
 import {
   LayoutDashboard,
   Package,
@@ -39,7 +40,9 @@ export default function AdminNav({ role }: { role: string }) {
     <>
       {/* Sidebar desktop */}
       <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col border-r border-stone-200 bg-white px-4 py-6 md:flex">
-        <div className="mb-8 px-2 text-xl font-bold text-jus-600">KyaJus</div>
+        <div className="mb-8 px-2">
+          <Logo taille="text-2xl" />
+        </div>
         <nav className="flex-1 space-y-1">
           {liens.map(({ href, label, icon: Icon }) => (
             <Link
@@ -47,7 +50,7 @@ export default function AdminNav({ role }: { role: string }) {
               href={href}
               className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
                 actif(href)
-                  ? "bg-jus-50 text-jus-600"
+                    ? "bg-fond-doux text-primaire"
                   : "text-stone-600 hover:bg-stone-50"
               }`}
             >
@@ -72,7 +75,7 @@ export default function AdminNav({ role }: { role: string }) {
             key={href}
             href={href}
             className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-medium ${
-              actif(href) ? "text-jus-600" : "text-stone-500"
+              actif(href) ? "text-primaire" : "text-stone-500"
             }`}
           >
             <Icon size={20} />
