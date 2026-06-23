@@ -38,3 +38,18 @@ export async function getResumeFinance() {
     taux: taux * 100,
   };
 }
+
+// Repartition du benefice a repartir entre les investisseurs, selon leur part.
+export async function getRepartition() {
+  const resume = await getResumeFinance();
+  const investisseurs = await prisma.investisseur.findMany({ orderBy: { nom: "asc" } });
+
+  return investisseurs.map((i) => ({
+    id: i.id,
+    nom: i.nom,
+    userId: i.userId,
+    montantInvesti: Number(i.montantInvesti),
+    partPourcent: Number(i.partPourcent),
+    part: (Number(i.partPourcent) / 100) * resume.beneficeARepartir,
+  }));
+}

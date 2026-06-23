@@ -27,3 +27,12 @@ export type DepenseInput = {
   description: string;
   date: string;
 };
+
+export type InvestisseurInput = {
+  nom: string;
+  montantInvesti: number;
+  partPourcent: number;
+  creerAcces: boolean;
+  email: string;
+  motDePasse: string;
+};
